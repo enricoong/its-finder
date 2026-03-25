@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Trova il tuo ITS Academy in Italia. Cerca per regione e indirizzo tecnologico." />
+  <title>ITS Finder — Trova il tuo ITS Academy</title>
+
+  <!-- Fonts: solo i due pesi necessari per ciascuna famiglia -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,500&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- ── Nav ─────────────────────────────────────────────────── -->
+<nav class="nav">
+  <button class="nav-brand" id="nav-brand" aria-label="Torna alla home">
+    ITS<span>Finder</span>
+  </button>
+  <span class="nav-tag">Il tuo motore di ricerca per gli ITS d'Italia</span>
+</nav>
+
+<!-- ══ HOME PAGE ════════════════════════════════════════════ -->
+<div id="page-home" class="page active">
+
+  <!-- Sinistra: branding + descrizione -->
+  <div class="home-left">
+    <div class="badge">In manutenzione</div>
+
+    <h1 class="home-title display">
+      Trova l'<em>ITS</em><br>
+      che fa per te
+    </h1>
+
+    <p class="home-desc">
+      Gli Istituti Tecnologici Superiori sono la via più diretta verso
+      un lavoro tecnico specializzato. Qui trovi tutti quelli attivi
+      in Italia, filtrati per regione e settore.
+    </p>
+
+    <div class="secondary-btns">
+      <button class="btn-secondary" id="btn-aiuto">
+        <span class="btn-secondary-icon">🧭</span>
+        Aiutami a scegliere ITS
+      </button>
+      <button class="btn-secondary" id="btn-cosits">
+        <span class="btn-secondary-icon">💡</span>
+        Cos'è ITS e perché sceglierlo
+      </button>
+    </div>
+  </div>
+
+  <!-- Destra: form di ricerca -->
+  <div class="home-right">
+    <p class="panel-label">Cerca il tuo percorso</p>
+
+    <div class="field">
+      <label for="sel-regione">📍 Regione</label>
+      <select id="sel-regione" aria-label="Filtra per regione">
+        <option value="">Tutte le regioni</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="sel-indirizzo">🎓 Indirizzo</label>
+      <select id="sel-indirizzo" aria-label="Filtra per indirizzo tecnologico">
+        <option value="">Tutti gli indirizzi</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="sel-desc">💬 Cerca nella descrizione</label>
+      <input type="text" name="sel-desc" id="sel-desc" placeholder="Cerca nella descrione (facoltativo)">
+    </div>
+
+    <button class="btn-search" id="btn-search">
+      Trova il tuo ITS →
+    </button>
+
+    <p class="hint">Lascia i filtri default per vedere tutti gli ITS disponibili.</p>
+  </div>
+</div>
+
+<!-- ══ RESULTS PAGE ══════════════════════════════════════════ -->
+<div id="page-results" class="page">
+
+  <div class="results-header">
+    <div>
+      <h2 class="results-title display" id="res-title">Risultati</h2>
+      <p class="results-subtitle" id="res-subtitle"></p>
+      <div class="chips-row" id="res-chips"></div>
+    </div>
+    <button class="btn-back" id="btn-back">← Nuova ricerca</button>
+  </div>
+
+  <div id="cards-grid" class="cards-grid" role="list"></div>
+
+</div>
+
+<!-- ── Footer ───────────────────────────────────────────────── -->
+<footer>
+  <p class="footer-note">
+    ITS Finder &mdash; dati indicativi, aggiornati manualmente.<br>
+    Per informazioni ufficiali visita i siti dei singoli istituti.<br>
+    <span style="color: rgb(176, 176, 176);">Sito sviluppato con l'assistenza dell'IA.</span>
+  </p>
+  <p class="footer-credit">
+    Creato da <strong><a href="https://www.github.com/enricoong">Enrico</a></strong>.
+  </p>
+</footer>
+
+<!-- ══ MODAL: Aiutami a scegliere ════════════════════════════ -->
+<div id="modal-aiuto" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-aiuto-title">
+  <div class="modal-backdrop" data-close></div>
+  <div class="modal-box">
+    <button class="modal-close" data-close aria-label="Chiudi">✕</button>
+ 
+    <div class="modal-header">
+      <span class="modal-icon">🧭</span>
+      <h2 class="modal-title display" id="modal-aiuto-title">Aiutami a scegliere</h2>
+      <p class="modal-subtitle">Rispondi a queste domande per orientarti meglio.</p>
+    </div>
+ 
+    <div class="modal-body">
+ 
+      <div class="guide-block">
+        <h3 class="guide-q">Ti interessa lavorare con la tecnologia digitale?</h3>
+        <p class="guide-a">Scegli l'indirizzo <strong>Tecnologie dell'informazione e della comunicazione</strong>: sviluppo software, cybersecurity, cloud, data analytics e UX design.</p>
+      </div>
+ 
+      <div class="guide-block">
+        <h3 class="guide-q">Sei appassionato di motori, veicoli o logistica?</h3>
+        <p class="guide-a">L'indirizzo <strong>Mobilità sostenibile</strong> forma tecnici per automotive, aerospazio, meccatronica e supply chain. Alta richiesta nel Nord Italia.</p>
+      </div>
+ 
+      <div class="guide-block">
+        <h3 class="guide-q">Ti piace il cibo, il vino, il turismo o l'artigianato?</h3>
+        <p class="guide-a"><strong>Turismo, agribusiness e patrimonio culturale</strong> è il percorso giusto: gestione di strutture ricettive, enogastronomia, valorizzazione dei beni culturali.</p>
+      </div>
+ 
+      <div class="guide-block">
+        <h3 class="guide-q">Sei attratto da energia, ambiente ed edilizia sostenibile?</h3>
+        <p class="guide-a">L'indirizzo <strong>Efficienza energetica</strong> forma esperti in rinnovabili, building automation e risparmio energetico. Settore in forte crescita.</p>
+      </div>
+ 
+      <div class="guide-block">
+        <h3 class="guide-q">Il settore biomedicale o le scienze della vita ti affascinano?</h3>
+        <p class="guide-a"><strong>Salute e vita</strong> forma tecnici per dispositivi medici, diagnostica, biotecnologie e farmaceutica. Sbocchi prevalentemente al Centro-Nord.</p>
+      </div>
+ 
+      <div class="guide-block">
+        <h3 class="guide-q">Vuoi lavorare nel made in Italy, moda o manifattura avanzata?</h3>
+        <p class="guide-a"><strong>Nuove tecnologie per il made in Italy</strong> unisce tradizione e innovazione: stampa 3D, automazione, fashion tech e produzioni di qualità.</p>
+      </div>
+ 
+      <div class="guide-tip">
+        <strong>Consiglio pratico:</strong> considera la regione in cui vuoi vivere e lavorare dopo il diploma. Gli ITS hanno forti legami con le imprese locali e spesso assumono direttamente i propri studenti.
+      </div>
+    </div>
+  </div>
+</div>
+ 
+<!-- ══ MODAL: Cos'è ITS ══════════════════════════════════════ -->
+<div id="modal-cosits" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-cosits-title">
+  <div class="modal-backdrop" data-close></div>
+  <div class="modal-box">
+    <button class="modal-close" data-close aria-label="Chiudi">✕</button>
+ 
+    <div class="modal-header">
+      <span class="modal-icon">💡</span>
+      <h2 class="modal-title display" id="modal-cosits-title">Cos'è un ITS Academy?</h2>
+      <p class="modal-subtitle">La formazione tecnica superiore in Italia, spiegata semplicemente.</p>
+    </div>
+ 
+    <div class="modal-body">
+ 
+      <div class="info-block">
+        <h3 class="info-label">In breve</h3>
+        <p>Gli <strong>Istituti Tecnologici Superiori</strong> sono scuole post-diploma di alta formazione tecnica, istituite dallo Stato italiano. Durano <strong>2 anni</strong> (4 semestri) e rilasciano un titolo di <strong>Tecnico Superiore</strong>, riconosciuto a livello europeo come EQF livello 5.</p>
+      </div>
+ 
+      <div class="info-block">
+        <h3 class="info-label">Come funziona</h3>
+        <p>Almeno il <strong>30% delle ore</strong> si svolge in azienda tramite stage e laboratori. I docenti provengono per metà dal mondo delle imprese. I corsi sono a numero chiuso e richiedono un diploma di scuola superiore per l'accesso.</p>
+      </div>
+ 
+      <div class="info-block">
+        <h3 class="info-label">Perché sceglierlo</h3>
+        <p>Il tasso di occupazione degli ex studenti ITS supera il <strong>80% entro 12 mesi</strong> dal diploma, spesso nelle stesse aziende dove hanno fatto stage. I costi sono molto contenuti rispetto all'università e la durata è la metà.</p>
+      </div>
+ 
+      <div class="info-block">
+        <h3 class="info-label">I 7 indirizzi tecnologici</h3>
+        <ul class="info-list">
+          <li>Tecnologie dell'informazione e della comunicazione</li>
+          <li>Mobilità sostenibile</li>
+          <li>Nuove tecnologie per il made in Italy</li>
+          <li>Efficienza energetica</li>
+          <li>Turismo, agribusiness e patrimonio culturale</li>
+          <li>Salute e vita</li>
+          <li>Tecnologie innovative per i beni e le attività culturali</li>
+        </ul>
+      </div>
+ 
+      <div class="info-block">
+        <h3 class="info-label">ITS vs Università</h3>
+        <p>L'università è teorica e dura 3-5 anni. L'ITS è pratico, orientato al lavoro e dura 2 anni. Non si escludono: molti diplomati ITS si iscrivono poi all'università con crediti riconosciuti. La scelta dipende dal tuo obiettivo: lavorare presto o approfondire la teoria.</p>
+      </div>
+ 
+    </div>
+  </div>
+</div>
+
+<!-- Scripts: database prima, poi logica app -->
+<script src="database.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
