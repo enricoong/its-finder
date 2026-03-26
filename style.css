@@ -24,7 +24,10 @@
   --radius-pill:  999px;
 }
 
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+  display: block;
+}
 
 body {
   font-family: var(--font-body);
