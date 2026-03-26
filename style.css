@@ -35,6 +35,80 @@ body {
   line-height: 1.6;
 }
 
+/* ── Fonts ───────────────────────────────────────────────── */
+/* Downloaded using https://gwfh.mranftl.com in legacy support mode */
+
+/* syne-700 - latin */
+@font-face {
+  font-display: swap;
+  font-family: 'Syne';
+  font-style: normal;
+  font-weight: 700;
+  src: url('./fonts/syne-v24-latin/syne-v24-latin-700.woff2') format('woff2'),
+       url('./fonts/syne-v24-latin/syne-v24-latin-700.ttf') format('truetype');
+}
+
+/* syne-800 - latin */
+@font-face {
+  font-display: swap;
+  font-family: 'Syne';
+  font-style: normal;
+  font-weight: 800;
+  src: url('./fonts/syne-v24-latin/syne-v24-latin-800.woff2') format('woff2'),
+       url('./fonts/syne-v24-latin/syne-v24-latin-800.ttf') format('truetype');
+}
+
+/* dm-sans-regular - latin */
+@font-face {
+  font-display: swap;
+  font-family: 'DM Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: url('./fonts/dm-sans-v17-latin/dm-sans-v17-latin-regular.woff2') format('woff2'),
+       url('./fonts/dm-sans-v17-latin/dm-sans-v17-latin-regular.ttf') format('truetype');
+}
+
+/* dm-sans-italic - latin */
+@font-face {
+  font-display: swap;
+  font-family: 'DM Sans';
+  font-style: italic;
+  font-weight: 400;
+  src: url('./fonts/dm-sans-v17-latin/dm-sans-v17-latin-italic.woff2') format('woff2'),
+       url('./fonts/dm-sans-v17-latin/dm-sans-v17-latin-italic.ttf') format('truetype');
+}
+
+/* dm-sans-500 - latin */
+@font-face {
+  font-display: swap;
+  font-family: 'DM Sans';
+  font-style: normal;
+  font-weight: 500;
+  src: url('./fonts/dm-sans-v17-latin/dm-sans-v17-latin-500.woff2') format('woff2'),
+       url('./fonts/dm-sans-v17-latin/dm-sans-v17-latin-500.ttf') format('truetype');
+}
+
+/* dm-sans-500italic - latin */
+@font-face {
+  font-display: swap;
+  font-family: 'DM Sans';
+  font-style: italic;
+  font-weight: 500;
+  src: url('./fonts/dm-sans-v17-latin/dm-sans-v17-latin-500italic.woff2') format('woff2'),
+       url('./fonts/dm-sans-v17-latin/dm-sans-v17-latin-500italic.ttf') format('truetype');
+}
+
+/* dm-sans-700 - latin */
+@font-face {
+  font-display: swap;
+  font-family: 'DM Sans';
+  font-style: normal;
+  font-weight: 700;
+  src: url('./fonts/dm-sans-v17-latin/dm-sans-v17-latin-700.woff2') format('woff2'),
+       url('./fonts/dm-sans-v17-latin/dm-sans-v17-latin-700.ttf') format('truetype');
+}
+
+
 /* ── Typography helpers ───────────────────────────────────── */
 .display {
   font-family: var(--font-display);
