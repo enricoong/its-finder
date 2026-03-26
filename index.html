@@ -6,16 +6,17 @@
   <meta name="description" content="Trova il tuo ITS Academy in Italia. Cerca per regione e indirizzo tecnologico." />
   <title>ITS Finder — Trova il tuo ITS Academy</title>
 
-  <!-- Fonts: solo i due pesi necessari per ciascuna famiglia -->
+  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,500&display=swap" rel="stylesheet" />
 
+  <!-- Styles -->
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-<!-- ── Nav ─────────────────────────────────────────────────── -->
+<!-- Nav -->
 <nav class="nav">
   <button class="nav-brand" id="nav-brand" aria-label="Torna alla home">
     ITS<span>Finder</span>
@@ -23,7 +24,7 @@
   <span class="nav-tag">Il tuo motore di ricerca per gli ITS d'Italia</span>
 </nav>
 
-<!-- ══ HOME PAGE ════════════════════════════════════════════ -->
+<!-- HOME PAGE -->
 <div id="page-home" class="page active">
 
   <!-- Sinistra: branding + descrizione -->
@@ -65,7 +66,7 @@
     </div>
 
     <div class="field">
-      <label for="sel-indirizzo">🏷 Area / Tag</label>
+      <label for="sel-indirizzo">🏷 Indirizzo / Tag</label>
       <select id="sel-indirizzo" aria-label="Filtra per tag o area tematica">
         <option value="">Qualsiasi</option>
       </select>
@@ -84,7 +85,7 @@
   </div>
 </div>
 
-<!-- ══ RESULTS PAGE ══════════════════════════════════════════ -->
+<!-- RESULTS PAGE -->
 <div id="page-results" class="page">
 
   <div class="results-header">
@@ -100,7 +101,7 @@
 
 </div>
 
-<!-- ── Footer ───────────────────────────────────────────────── -->
+<!-- Footer -->
 <footer>
   <p class="footer-note">
     ITS Finder &mdash; dati indicativi, aggiornati manualmente.<br>
@@ -112,7 +113,7 @@
   </p>
 </footer>
 
-<!-- ══ MODAL: Aiutami a scegliere ════════════════════════════ -->
+<!-- MODAL: Aiutami a scegliere -->
 <div id="modal-aiuto" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-aiuto-title">
   <div class="modal-backdrop" data-close></div>
   <div class="modal-box">
@@ -163,7 +164,7 @@
   </div>
 </div>
  
-<!-- ══ MODAL: Cos'è ITS ══════════════════════════════════════ -->
+<!-- MODAL: Cos'è ITS -->
 <div id="modal-cosits" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-cosits-title">
   <div class="modal-backdrop" data-close></div>
   <div class="modal-box">
@@ -201,7 +202,7 @@
   </div>
 </div>
 
-<!-- Scripts: database prima, poi logica app -->
+<!-- Scripts -->
 <script src="database.js"></script>
 <script src="app.js"></script>
 </body>
