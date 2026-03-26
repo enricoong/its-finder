@@ -80,6 +80,12 @@ body {
   padding: .2em .7em;
   border-radius: var(--radius-pill);
 }
+/* Nascondi i tag nella nav su schermi piccoli */
+@media (max-width: 600px) {
+  .nav-tag {
+    display: none;
+  }
+}
 
 /* ── Page transitions ─────────────────────────────────────── */
 .page          { display: none; }
@@ -500,15 +506,19 @@ body {
 
 .card-indirizzo {
   display: inline-block;
-  font-size: .72rem;
+  font-size: .7rem;
   font-weight: 600;
-  letter-spacing: .08em;
+  letter-spacing: .07em;
   text-transform: uppercase;
   color: var(--green);
   background: var(--green-bg);
-  padding: .25em .7em;
+  padding: .22em .65em;
   border-radius: var(--radius-sm);
   margin-bottom: .85rem;
+}
+.card-indirizzo--dim{
+  color: var(--ink-soft);
+  background: var(--tag-bg);
 }
 
 .card-desc {
@@ -519,18 +529,69 @@ body {
   margin-bottom: 1rem;
 }
 
-.card-meta {
+/* ── Sedi nella card ──────────────────────────────────────── */
+.card-sedi {
   display: flex;
-  gap: 1.5rem;
+  flex-direction: column;
+  gap: .65rem;
+}
+
+.card-sede {
+  padding: .7rem .85rem;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  display: flex;
+  flex-direction: column;
+  gap: .55rem;
+}
+
+.sede-indirizzi {
+  display: flex;
   flex-wrap: wrap;
+  gap: .35rem;
 }
 
 .meta-item {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: .35em;
   font-size: .8rem;
   color: var(--ink-soft);
+}
+.meta-item strong { color: var(--ink); font-weight: 600; }
+
+.sede-indirizzi {
+  display: flex;
+  flex-direction: column;
+  gap: .45rem;
+}
+
+/* Nome del corso */
+.card-corso {
+  font-size: .88rem;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.3;
+}
+.card-corso--dim { color: var(--ink-soft); font-weight: 400; }
+
+/* Tag del corso */
+.card-tag {
+  display: inline-block;
+  font-size: .68rem;
+  font-weight: 500;
+  letter-spacing: .04em;
+  color: var(--ink-soft);
+  background: var(--tag-bg);
+  padding: .18em .6em;
+  border-radius: var(--radius-pill);
+  margin: .15rem .2rem 0 0;
+}
+.card-tag--active {
+  color: var(--accent);
+  background: var(--accent-light);
+  font-weight: 600;
 }
 
 .card-actions {

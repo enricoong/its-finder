@@ -20,45 +20,69 @@
     return node;
   };
 
-  /* ── Icons (nessuna libreria esterna) ─────────────────────── */
+  /* ── Icons ────────────────────────────────────────────────── */
   const ICON = {
     pin: `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>`,
-    cal: `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>`,
     ext: `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>`
   };
 
-  /* ── Popola i dropdown dai dati ───────────────────────────── */
+  /* ── Popola i dropdown ────────────────────────────────────── */
   function populateSelects() {
-    const regioni   = [...new Set(ITS_DATABASE.map(d => d.regione))].sort();
-    const indirizzi = [...new Set(ITS_DATABASE.map(d => d.indirizzo))].sort();
+    const regioni = [...new Set(
+      ITS_DATABASE.flatMap(d => d.sedi.map(s => s.regione))
+    )].sort();
 
-    const selR = $('sel-regione');
-    const selI = $('sel-indirizzo');
+    /* Tag: raccolti da tutti gli indirizzi di tutte le sedi */
+    const tags = [...new Set(
+      ITS_DATABASE.flatMap(d =>
+        d.sedi.flatMap(s => s.indirizzi.flatMap(i => i.tag))
+      )
+    )].sort();
 
-    regioni.forEach(r => selR.appendChild(new Option(r, r)));
-    indirizzi.forEach(i => selI.appendChild(new Option(i, i)));
+    regioni.forEach(r => $('sel-regione').appendChild(new Option(r, r)));
+    tags.forEach(t    => $('sel-indirizzo').appendChild(new Option(t, t)));
   }
 
   /* ── Ricerca e filtro ─────────────────────────────────────── */
   function doSearch() {
     const regione   = $('sel-regione').value;
-    const indirizzo = $('sel-indirizzo').value;
+    const tag       = $('sel-indirizzo').value;   /* valore = tag */
     const descQuery = $('sel-desc').value.trim().toLowerCase();
 
-    const results = ITS_DATABASE.filter(d =>
-      (!regione   || d.regione   === regione) &&
-      (!indirizzo || d.indirizzo === indirizzo) &&
-      (!descQuery || d.desc.toLowerCase().includes(descQuery) ||
-                     d.nome.toLowerCase().includes(descQuery))
-    );
+    const results = ITS_DATABASE
+      .map(its => {
+        /* Filtra le sedi: regione corrispondente E almeno un indirizzo col tag */
+        const sediMatch = its.sedi.filter(s =>
+          (!regione || s.regione === regione) &&
+          (!tag     || s.indirizzi.some(i => i.tag.includes(tag)))
+        );
+        if (!sediMatch.length) return null;
 
-    renderResults(results, regione, indirizzo, descQuery);
+        /* Per ogni sede filtrata, evidenzia solo gli indirizzi col tag cercato */
+        const sediConMatch = sediMatch.map(s => ({
+          ...s,
+          indirizzi: s.indirizzi.map(i => ({
+            ...i,
+            match: !tag || i.tag.includes(tag)
+          }))
+        }));
+
+        return { ...its, sediMatch: sediConMatch };
+      })
+      .filter(its =>
+        its !== null &&
+        (!descQuery ||
+          its.desc.toLowerCase().includes(descQuery) ||
+          its.nome.toLowerCase().includes(descQuery))
+      );
+
+    renderResults(results, regione, tag, descQuery);
     showPage('page-results');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  /* ── Render pagina risultati ──────────────────────────────── */
-  function renderResults(lista, regione, indirizzo, descQuery = '') {
+  /* ── Render risultati ─────────────────────────────────────── */
+  function renderResults(lista, regione, tag, descQuery = '') {
     const n = lista.length;
 
     $('res-title').textContent =
@@ -66,7 +90,7 @@
       n === 1 ? '1 ITS Academy trovato' :
       `${n} ITS Academy trovati`;
 
-    $('res-subtitle').textContent = (regione || indirizzo || descQuery)
+    $('res-subtitle').textContent = (regione || tag || descQuery)
       ? 'Basato sui filtri selezionati'
       : 'Tutti gli ITS disponibili in Italia';
 
@@ -74,10 +98,9 @@
     const chips = $('res-chips');
     chips.innerHTML = '';
     if (regione)   chips.appendChild(el('span', { class: 'chip' }, `📍 ${regione}`));
-    if (indirizzo) chips.appendChild(el('span', { class: 'chip' }, `🎓 ${indirizzo}`));
+    if (tag)       chips.appendChild(el('span', { class: 'chip' }, `🏷 ${tag}`));
     if (descQuery) chips.appendChild(el('span', { class: 'chip' }, `🔍 "${descQuery}"`));
 
-    /* Cards */
     const grid = $('cards-grid');
     grid.innerHTML = '';
 
@@ -86,7 +109,7 @@
         el('div', { class: 'no-results' },
           el('div', { class: 'no-results-icon' }, '🔍'),
           el('h3', {}, 'Nessun ITS trovato'),
-          el('p',  {}, 'Prova a cambiare regione o indirizzo.')
+          el('p',  {}, 'Prova a cambiare regione o tag.')
         )
       );
       return;
@@ -100,29 +123,50 @@
         'data-id': its.id
       });
 
-      /* Corpo */
       const body = el('div', { class: 'card-body' });
       body.appendChild(el('h2', { class: 'card-name' }, its.nome));
-      body.appendChild(el('span', { class: 'card-indirizzo' }, its.indirizzo));
-      body.appendChild(el('p', { class: 'card-desc' }, its.desc));
+      body.appendChild(el('p',  { class: 'card-desc' }, its.desc));
 
-      const meta = el('div', { class: 'card-meta' });
-      meta.innerHTML =
-        `<span class="meta-item">${ICON.pin} ${its.citta}, ${its.regione}</span>` +
-        `<span class="meta-item">${ICON.cal} Durata: 2 anni</span>`;
-      body.appendChild(meta);
+      /* Sedi */
+      const sediWrap = el('div', { class: 'card-sedi' });
+      its.sediMatch.forEach(sede => {
+        const sedeEl = el('div', { class: 'card-sede' });
+
+        const loc = el('span', { class: 'meta-item' });
+        loc.innerHTML = `${ICON.pin} <strong>${sede.citta}</strong>-&nbsp; ${sede.regione}`;
+        sedeEl.appendChild(loc);
+
+        const tagsWrap = el('div', { class: 'sede-indirizzi' });
+        sede.indirizzi.forEach(ind => {
+          /* Nome corso */
+          const nomeEl = el('span', {
+            class: `card-corso${ind.match ? '' : ' card-corso--dim'}`
+          }, ind.nome);
+          tagsWrap.appendChild(nomeEl);
+
+          /* Tag del corso — mostra solo quelli, piccoli */
+          const tagsFrag = document.createDocumentFragment();
+          ind.tag.forEach(t => {
+            tagsFrag.appendChild(el('span', {
+              class: `card-tag${(tag && t === tag) ? ' card-tag--active' : ''}`
+            }, t));
+          });
+          tagsWrap.appendChild(tagsFrag);
+        });
+        sedeEl.appendChild(tagsWrap);
+        sediWrap.appendChild(sedeEl);
+      });
+      body.appendChild(sediWrap);
 
       /* Azioni */
       const actions = el('div', { class: 'card-actions' });
-      const link = el('a', {
+      actions.appendChild(el('a', {
         class: 'btn-site',
         href: its.sito,
         target: '_blank',
         rel: 'noopener noreferrer',
         html: `Sito ufficiale ${ICON.ext}`
-      });
-      actions.appendChild(link);
-      actions.appendChild(el('span', { class: 'card-region-tag' }, its.regione));
+      }));
 
       card.appendChild(body);
       card.appendChild(actions);
@@ -151,7 +195,7 @@
     document.body.style.overflow = 'hidden';
     modal.querySelector('.modal-close').focus();
   }
- 
+
   function closeAllModals() {
     document.querySelectorAll('.modal.open').forEach(m => m.classList.remove('open'));
     document.body.style.overflow = '';
@@ -165,19 +209,18 @@
     $('btn-back').addEventListener('click', showHome);
     $('nav-brand').addEventListener('click', showHome);
 
-    /* Enter dai select */
-    ['sel-regione', 'sel-indirizzo'].forEach(id => {
-      $(id).addEventListener('keydown', e => { if (e.key === 'Enter') doSearch(); });
+    ['sel-regione', 'sel-indirizzo', 'sel-desc'].forEach(id => {
+      const el = $(id);
+      if (el) el.addEventListener('keydown', e => { if (e.key === 'Enter') doSearch(); });
     });
 
-        /* Modal */
     $('btn-aiuto').addEventListener('click',  () => openModal('modal-aiuto'));
     $('btn-cosits').addEventListener('click', () => openModal('modal-cosits'));
- 
+
     document.querySelectorAll('[data-close]').forEach(el => {
       el.addEventListener('click', closeAllModals);
     });
- 
+
     document.addEventListener('keydown', e => {
       if (e.key === 'Escape') closeAllModals();
     });
