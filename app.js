@@ -6,7 +6,7 @@
   'use strict';
 
   /* ── Helpers DOM ──────────────────────────────────────────── */
-  const $  = id => document.getElementById(id);
+  const $ = id => document.getElementById(id);
   const el = (tag, attrs = {}, ...children) => {
     const node = document.createElement(tag);
     Object.entries(attrs).forEach(([k, v]) => {
@@ -40,13 +40,13 @@
     )].sort();
 
     regioni.forEach(r => $('sel-regione').appendChild(new Option(r, r)));
-    tags.forEach(t    => $('sel-indirizzo').appendChild(new Option(t, t)));
+    tags.forEach(t => $('sel-indirizzo').appendChild(new Option(t, t)));
   }
 
   /* ── Ricerca e filtro ─────────────────────────────────────── */
   function doSearch() {
-    const regione   = $('sel-regione').value;
-    const tag       = $('sel-indirizzo').value;   /* valore = tag */
+    const regione = $('sel-regione').value;
+    const tag = $('sel-indirizzo').value;   /* valore = tag */
     const descQuery = $('sel-desc').value.trim().toLowerCase();
 
     const results = ITS_DATABASE
@@ -54,7 +54,7 @@
         /* Filtra le sedi: regione corrispondente E almeno un indirizzo col tag */
         const sediMatch = its.sedi.filter(s =>
           (!regione || s.regione === regione) &&
-          (!tag     || s.indirizzi.some(i => i.tag.includes(tag)))
+          (!tag || s.indirizzi.some(i => i.tag.includes(tag)))
         );
         if (!sediMatch.length) return null;
 
@@ -87,8 +87,8 @@
 
     $('res-title').textContent =
       n === 0 ? 'Nessun risultato' :
-      n === 1 ? '1 ITS Academy trovato' :
-      `${n} ITS Academy trovati`;
+        n === 1 ? '1 ITS Academy trovato' :
+          `${n} ITS Academy trovati`;
 
     $('res-subtitle').textContent = (regione || tag || descQuery)
       ? 'Basato sui filtri selezionati'
@@ -97,8 +97,8 @@
     /* Chips filtri attivi */
     const chips = $('res-chips');
     chips.innerHTML = '';
-    if (regione)   chips.appendChild(el('span', { class: 'chip' }, `📍 ${regione}`));
-    if (tag)       chips.appendChild(el('span', { class: 'chip' }, `🏷 ${tag}`));
+    if (regione) chips.appendChild(el('span', { class: 'chip' }, `📍 ${regione}`));
+    if (tag) chips.appendChild(el('span', { class: 'chip' }, `🏷 ${tag}`));
     if (descQuery) chips.appendChild(el('span', { class: 'chip' }, `🔍 "${descQuery}"`));
 
     const grid = $('cards-grid');
@@ -109,7 +109,7 @@
         el('div', { class: 'no-results' },
           el('div', { class: 'no-results-icon' }, '🔍'),
           el('h3', {}, 'Nessun ITS trovato'),
-          el('p',  {}, 'Prova a cambiare regione o tag.')
+          el('p', {}, 'Prova a cambiare regione o tag.')
         )
       );
       return;
@@ -125,7 +125,7 @@
 
       const body = el('div', { class: 'card-body' });
       body.appendChild(el('h2', { class: 'card-name' }, its.nome));
-      body.appendChild(el('p',  { class: 'card-desc' }, its.desc));
+      body.appendChild(el('p', { class: 'card-desc' }, its.desc));
 
       /* Sedi */
       const sediWrap = el('div', { class: 'card-sedi' });
@@ -137,22 +137,30 @@
         sedeEl.appendChild(loc);
 
         const tagsWrap = el('div', { class: 'sede-indirizzi' });
+
         sede.indirizzi.forEach(ind => {
-          /* Nome corso */
-          const nomeEl = el('span', {
+          // container per singolo corso
+          const corsoWrap = el('div');
+
+          // nome corso
+          const nomeEl = el('div', {
             class: `card-corso${ind.match ? '' : ' card-corso--dim'}`
           }, ind.nome);
-          tagsWrap.appendChild(nomeEl);
 
-          /* Tag del corso — mostra solo quelli, piccoli */
-          const tagsFrag = document.createDocumentFragment();
+          // container SOLO per i tag
+          const tagsRow = el('div', { class: 'card-tags' });
+
           ind.tag.forEach(t => {
-            tagsFrag.appendChild(el('span', {
+            tagsRow.appendChild(el('span', {
               class: `card-tag${(tag && t === tag) ? ' card-tag--active' : ''}`
             }, t));
           });
-          tagsWrap.appendChild(tagsFrag);
+
+          corsoWrap.appendChild(nomeEl);
+          corsoWrap.appendChild(tagsRow);
+          tagsWrap.appendChild(corsoWrap);
         });
+
         sedeEl.appendChild(tagsWrap);
         sediWrap.appendChild(sedeEl);
       });
@@ -162,8 +170,8 @@
       const actions = el('div', { class: 'card-actions' });
       actions.appendChild(el('a', {
         class: 'btn-site',
-        href: its.sito,
         target: '_blank',
+        href: its.sito,
         rel: 'noopener noreferrer',
         html: `Sito ufficiale ${ICON.ext}`
       }));
@@ -214,7 +222,7 @@
       if (el) el.addEventListener('keydown', e => { if (e.key === 'Enter') doSearch(); });
     });
 
-    $('btn-aiuto').addEventListener('click',  () => openModal('modal-aiuto'));
+    $('btn-aiuto').addEventListener('click', () => openModal('modal-aiuto'));
     $('btn-cosits').addEventListener('click', () => openModal('modal-cosits'));
 
     document.querySelectorAll('[data-close]').forEach(el => {

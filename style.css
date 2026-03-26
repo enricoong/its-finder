@@ -550,10 +550,9 @@ body {
   border-radius: var(--radius-lg);
   padding: 1.75rem 2rem;
   box-shadow: var(--card-shadow);
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 1.5rem;
-  align-items: start;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
   transition: border-color .2s, box-shadow .2s, transform .2s;
   animation: cardIn .35s ease both;
 }
@@ -625,8 +624,8 @@ body {
 
 .sede-indirizzi {
   display: flex;
-  flex-wrap: wrap;
-  gap: .35rem;
+  flex-direction: column;
+  gap: .45rem;
 }
 
 .meta-item {
@@ -647,6 +646,7 @@ body {
 /* Nome del corso */
 .card-corso {
   font-size: .88rem;
+  text-decoration: underline;
   font-weight: 700;
   color: var(--ink);
   line-height: 1.3;
@@ -654,8 +654,17 @@ body {
 .card-corso--dim { color: var(--ink-soft); font-weight: 400; }
 
 /* Tag del corso */
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .35rem;
+  margin-top: .3rem;
+  margin-bottom: .3rem;
+}
+
 .card-tag {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
   font-size: .68rem;
   font-weight: 500;
   letter-spacing: .04em;
@@ -663,19 +672,22 @@ body {
   background: var(--tag-bg);
   padding: .18em .6em;
   border-radius: var(--radius-pill);
-  margin: .15rem .2rem 0 0;
+  /*margin: .15rem .2rem 0 0;*/
+  white-space: nowrap;
+  transition: .2s;
+  border: 1px solid transparent;
+  cursor: default;;
 }
-.card-tag--active {
-  color: var(--accent);
+.card-tag:hover {
+  border: 1px solid var(--accent);
   background: var(--accent-light);
-  font-weight: 600;
+  font-weight: 500;
 }
 
 .card-actions {
   display: flex;
-  flex-direction: column;
+  justify-content: flex-end;
   gap: .6rem;
-  align-items: flex-end;
 }
 
 .btn-site {
@@ -760,7 +772,8 @@ footer {
 }
 
 @media (max-width: 600px) {
-  .its-card { grid-template-columns: 1fr; }
-  .card-actions { flex-direction: row; align-items: center; }
+  .its-card { padding: 1.25rem 1.1rem; }
+  .card-actions { justify-content: stretch; }
+  .btn-site { flex: 1; justify-content: center; }
   footer { flex-direction: column; align-items: flex-start; }
 }
